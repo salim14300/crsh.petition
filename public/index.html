@@ -420,6 +420,14 @@ async function submitVote(){
     votes = data.votes || votes;
     msgEl.textContent = 'Signed! Thanks for voting.';
     msgEl.className = 'form-msg ok';
+    
+    // --- X (Twitter) Click-to-Tweet Logic Start ---
+    const tweetText = encodeURIComponent(
+      `I just signed the petition to bring back the 15x wager system! @crshmarket we want the old system back.\n\nName: ${name}\nReason: ${comment ? comment : "We need real withdrawable balances!"}\n\nSign here: https://x.com/crshmarket`
+    );
+    window.open(`https://twitter.com/intent/tweet?text=${tweetText}`, '_blank');
+    // --- X (Twitter) Click-to-Tweet Logic End ---
+
     document.getElementById('nameInput').value = '';
     document.getElementById('commentInput').value = '';
     renderBoard();
