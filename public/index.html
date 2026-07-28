@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bring Back 15x — CRSH Community Petition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg: #0c0a14;
+    --bg-raised: #15111f;
+    --line: #2a2438;
+    --accent: #836EF9;
+    --accent-glow: rgba(131, 110, 249, 0.35);
+    --text: #e9e6f5;
+    --text-dim: #9891b0;
+    --text-faint: #5c5670;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{background:var(--bg);}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  ::selection{ background: var(--accent); color:#0c0a14; }
+
+  .noise{
+    position:fixed; inset:0; pointer-events:none; opacity:0.035; z-index:1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .glow{
+    position:fixed; top:-200px; left:50%; transform:translateX(-50%);
+    width:600px; height:400px; z-index:0; pointer-events:none;
+    background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+    filter: blur(40px);
+  }
+
+  .wrap{ max-width: 680px; margin: 0 auto; padding: 0 20px 80px; position:relative; z-index:2; }
+
+  .ticker{
+    border-bottom:1px solid var(--line);
+    background: var(--bg-raised);
+    overflow:hidden;
+    white-space:nowrap;
+    padding: 7px 0;
+    position:relative; z-index:2;
+  }
+  .ticker-track{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color: var(--text-faint);
+    animation: scroll 22s linear infinite;
+  }
+  .ticker span{ margin-right: 40px; }
+  .ticker .hot{ color: var(--accent); }
+  @keyframes scroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  header{ padding: 56px 0 28px; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    text-transform:uppercase;
+    display:flex; align-items:center; gap:8px;
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  h1{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size: clamp(28px, 7vw, 44px);
+    line-height:1.08;
+    letter-spacing:-0.02em;
+    color:#fff;
+    margin-bottom:16px;
+  }
+  h1 .accent-word{ color: var(--accent); }
+  .sub{
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 520px;
+  }
+  .sub b{ color: var(--text); font-weight:600; }
+
+  .board{
+    background: var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding: 28px 24px;
+    margin: 32px 0 8px;
+    position:relative;
+    overflow:hidden;
+  }
+  .board::before{
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .board-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color: var(--text-faint);
+    margin-bottom:8px;
+  }
+  .board-title{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:16px;
+    color: var(--accent);
+    margin-bottom:20px;
+  }
+  .big-count{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size: 56px;
+    line-height:1;
+    color:#fff;
+    text-shadow: 0 0 30px var(--accent-glow);
+  }
+  .big-count-label{
+    font-size:13px;
+    color: var(--text-dim);
+    margin-top:8px;
+  }
+
+  .vote-btn{
+    width:100%;
+    margin-top:20px;
+    padding: 14px;
+    border-radius:10px;
+    border:1px solid var(--accent);
+    background: var(--accent);
+    color: #0c0a14;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size:14px;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    transition: all 0.15s ease;
+  }
+  .vote-btn:hover{ box-shadow: 0 0 24px var(--accent-glow); transform: translateY(-1px); }
+
+  .total-line{
+    text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;
+    color:var(--text-faint);margin:14px 0 40px;
+  }
+
+  .panel{
+    background: var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding: 22px;
+    margin-bottom: 36px;
+  }
+  .panel-title{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:0.05em;
+    margin-bottom:16px;
+    color: var(--text);
+  }
+  label{
+    display:block;
+    font-size:11.5px;
+    color: var(--text-faint);
+    margin-bottom:6px;
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.04em;
+  }
+  input[type=text], textarea{
+    width:100%;
+    background:#08060f;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding: 11px 12px;
+    color: var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:14px;
+    margin-bottom:16px;
+    resize:vertical;
+  }
+  input[type=text]:focus, textarea:focus{
+    outline:none; border-color: var(--accent);
+  }
+  textarea{ min-height:80px; }
+
+  .submit-btn{
+    width:100%;
+    padding:13px;
+    border-radius:9px;
+    border:none;
+    background: var(--accent);
+    color:#0c0a14;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:0.03em;
+    cursor:pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+  .submit-btn:hover{ transform: translateY(-1px); box-shadow: 0 0 24px var(--accent-glow); }
+  .submit-btn:disabled{ opacity:0.4; cursor:default; transform:none; box-shadow:none; }
+  .form-msg{
+    font-size:12px; margin-top:10px; font-family:'JetBrains Mono', monospace;
+    color: var(--text-faint); text-align:center; min-height:16px;
+  }
+  .form-msg.err{ color: #f87171; }
+  .form-msg.ok{ color: var(--accent); }
+
+  .list-header{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom: 16px;
+  }
+  .list-title{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:0.05em;
+  }
+  .list-count{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color: var(--text-faint);
+  }
+
+  .sig{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    background: var(--bg-raised);
+  }
+  .sig-top{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:6px;
+  }
+  .sig-name{
+    font-weight:600; font-size:13.5px; color: var(--text);
+  }
+  .sig-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    padding: 3px 8px;
+    border-radius:5px;
+    letter-spacing:0.04em;
+    font-weight:700;
+    background: rgba(131, 110, 249, 0.15);
+    color: var(--accent);
+  }
+  .sig-comment{
+    font-size:13px; color: var(--text-dim); line-height:1.5;
+  }
+  .sig-time{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px; color: var(--text-faint);
+    margin-top:8px;
+  }
+  .empty-state{
+    text-align:center; padding: 40px 20px;
+    color: var(--text-faint); font-size:13px;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .loading{ text-align:center; padding:30px; color:var(--text-faint); font-family:'JetBrains Mono', monospace; font-size:12px;}
+
+  footer{
+    text-align:center; padding-top:30px; border-top:1px solid var(--line);
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; color: var(--text-faint);
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="noise"></div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="hot">● COMMUNITY PETITION</span>
+    <span>NOT AFFILIATED WITH CRSHMARKET</span>
+    <span class="hot">● VOTE TO BRING BACK 15x WAGER</span>
+    <span>PROMO BALANCE = NOT WITHDRAWABLE</span>
+    <span class="hot">● COMMUNITY PETITION</span>
+    <span>NOT AFFILIATED WITH CRSHMARKET</span>
+    <span class="hot">● VOTE TO BRING BACK 15x WAGER</span>
+    <span>PROMO BALANCE = NOT WITHDRAWABLE</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><span class="dot"></span> OPEN PETITION · LIVE VOTE</div>
+    <h1>Give us back the <span class="accent-word">15x wager</span> system.</h1>
+    <p class="sub">The old system let winnings hit real, withdrawable balance. The new update routes wins — even on deposited funds — into promo balance that can't be cashed out. <b>Sign to tell CRSHMARKET you want the old system back.</b></p>
+  </header>
+
+  <div class="board">
+    <div class="board-label">Petition Status</div>
+    <div class="board-title">OLD · 15x WAGER SYSTEM</div>
+    <div class="big-count" id="voteCount">0</div>
+    <div class="big-count-label" id="voteLabel">signatures so far</div>
+    <button class="vote-btn" onclick="document.getElementById('nameInput').focus()">Sign the Petition</button>
+  </div>
+  <div class="total-line">Every signature is sent as a public message to CRSHMARKET.</div>
+
+  <div class="panel">
+    <div class="panel-title">SIGN THE PETITION</div>
+    <label for="nameInput">Your name</label>
+    <input type="text" id="nameInput" placeholder="e.g. Farman" maxlength="40">
+    <label for="commentInput">Why? (optional)</label>
+    <textarea id="commentInput" placeholder="Tell CRSHMARKET why you want this..." maxlength="280"></textarea>
+    <button class="submit-btn" id="submitBtn" onclick="submitVote()">SIGN PETITION</button>
+    <div class="form-msg" id="formMsg"></div>
+  </div>
+
+  <div class="list-header">
+    <div class="list-title">SIGNATURES</div>
+    <div class="list-count" id="listCount">—</div>
+  </div>
+  <div id="sigList"><div class="loading">Loading signatures…</div></div>
+
+  <footer>
+    Independent community petition · Not affiliated with, endorsed by, or operated by CRSHMARKET.<br>
+    Signatures are public and stored for this petition only.
+  </footer>
+</div>
+
+<script>
+let votes = [];
+
+function fmtTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' · ' + d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+}
+
+function renderBoard(){
+  const total = votes.length;
+  document.getElementById('voteCount').textContent = total;
+  document.getElementById('voteLabel').textContent = total === 1 ? 'signature so far' : 'signatures so far';
+  document.getElementById('listCount').textContent = total + (total===1 ? ' signature' : ' signatures');
+}
+
+function renderList(){
+  const listEl = document.getElementById('sigList');
+  if(votes.length === 0){
+    listEl.innerHTML = '<div class="empty-state">No signatures yet. Be the first to vote.</div>';
+    return;
+  }
+  const sorted = [...votes].sort((a,b) => b.ts - a.ts);
+  listEl.innerHTML = sorted.map(v => `
+    <div class="sig">
+      <div class="sig-top">
+        <div class="sig-name">${escapeHtml(v.name)}</div>
+        <div class="sig-tag">OLD SYSTEM</div>
+      </div>
+      ${v.comment ? `<div class="sig-comment">${escapeHtml(v.comment)}</div>` : ''}
+      <div class="sig-time">${fmtTime(v.ts)}</div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function loadVotes(){
+  try{
+    const res = await fetch('/api/votes');
+    if(!res.ok) throw new Error('Failed to load votes');
+    const data = await res.json();
+    votes = data.votes || [];
+  }catch(e){
+    console.log('loadVotes error:', e);
+  }
+  renderBoard();
+  renderList();
+}
+
+async function submitVote(){
+  const msgEl = document.getElementById('formMsg');
+  const name = document.getElementById('nameInput').value.trim();
+  const comment = document.getElementById('commentInput').value.trim();
+
+  if(!name){
+    msgEl.textContent = 'Please enter your name.';
+    msgEl.className = 'form-msg err';
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'SIGNING...';
+
+  try{
+    const res = await fetch('/api/votes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, choice: 'old', comment })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Failed to submit');
+
+    votes = data.votes || votes;
+    msgEl.textContent = 'Signed! Thanks for voting.';
+    msgEl.className = 'form-msg ok';
+    document.getElementById('nameInput').value = '';
+    document.getElementById('commentInput').value = '';
+    renderBoard();
+    renderList();
+  }catch(e){
+    console.log('submitVote error:', e);
+    msgEl.textContent = 'Error: ' + (e.message || 'try again in a moment.');
+    msgEl.className = 'form-msg err';
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'SIGN PETITION';
+  }
+}
+
+loadVotes();
+setInterval(loadVotes, 8000);
+</script>
+</body>
+</html>
